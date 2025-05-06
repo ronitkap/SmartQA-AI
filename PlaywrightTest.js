@@ -1,51 +1,31 @@
 ```javascript
 import { test, expect } from '@playwright/test';
 
-test.describe('Pre-conditions Acceptance Criteria', () => {
+test.describe('3.1.1 Technical changes', () => {
   
-  test('Verify error message for unreferenced refunds', async ({ page }) => {
-    // Navigate to the refund page
-    await page.goto('/refund');
-    
-    // Attempt to process an unreferenced refund
-    await page.fill('#refundInput', 'unreferencedRefundId');
-    await page.click('#processRefund');
-    
-    // Expect appropriate error message to be displayed
-    const errorMessage = await page.locator('#errorMessage');
-    await expect(errorMessage).toHaveText('Appropriate error message for unreferenced refunds.');
+  test('Acceptance Criterion 1', async ({ page }) => {
+    await page.goto('URL_OF_YOUR_APPLICATION');
+
+    // Replace with actual selectors and actions to verify the first acceptance criterion
+    await expect(page.locator('SELECTOR_FOR_CRITERION_1')).toBeVisible();
   });
 
-  test('Check standard message for unauthorized Adyen calls', async ({ page }) => {
-    // Navigate to Adyen API call
-    await page.goto('/adyen-calls');
+  test('Acceptance Criterion 2', async ({ page }) => {
+    await page.goto('URL_OF_YOUR_APPLICATION');
 
-    // Attempt unauthorized operation
-    await page.click('#unauthorizedOperation');
-
-    // Expect standard error message to be displayed
-    const errorMessage = await page.locator('#errorMessage');
-    await expect(errorMessage).toHaveText('Standard message for unauthorized access.');
+    // Replace with actual selectors and actions to verify the second acceptance criterion
+    await expect(page.locator('SELECTOR_FOR_CRITERION_2')).toHaveText('EXPECTED_TEXT');
   });
 
-  test('Validate impact of NZ team request on AU implementation', async ({ page }) => {
-    // Navigate to the settings impacting AU
-    await page.goto('/settings/au');
+  test('Acceptance Criterion 3', async ({ page }) => {
+    await page.goto('URL_OF_YOUR_APPLICATION');
 
-    // Check for the impact of the NZ team's implementation
-    const messageImpact = await page.locator('#impactMessage');
-    await expect(messageImpact).toHaveText('This implementation is country-agnostic and impacts AU.');
+    // Replace with actual selectors and actions to verify the third acceptance criterion
+    await page.locator('SELECTOR_FOR_CRITERION_3').click();
+    await expect(page.locator('SELECTOR_FOR_CRITERION_3_RESULT')).toBeVisible();
   });
 
-  test('Ensure Billing Centre and FSCD handle new error message from CLP payments', async ({ page }) => {
-    // Simulate CLP payment processing
-    await page.goto('/clp-payments');
-    await page.click('#processCLPPayment');
-
-    // Check for error message handling
-    const errorMessage = await page.locator('#errorMessage');
-    await expect(errorMessage).toHaveText('New error message for CLP payments received.');
-  });
+  // Add additional test cases for other acceptance criteria as necessary
 
 });
 ```
