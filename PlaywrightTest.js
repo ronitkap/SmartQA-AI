@@ -1,31 +1,55 @@
 ```javascript
 import { test, expect } from '@playwright/test';
 
-test.describe('3.1.1 Technical changes', () => {
+test.describe('Gateway Service Error Transformation', () => {
   
-  test('Acceptance Criterion 1', async ({ page }) => {
-    await page.goto('URL_OF_YOUR_APPLICATION');
+  test('should transform Adyen error code 101 for invalid card number', async ({ request }) => {
+    const response = await request.post('/your-endpoint', {
+      data: {
+        cardInfo: {
+          encryptedCardNumber: 'invalid-card-number'
+        }
+      }
+    });
+    
+    const responseBody = await response.json();
 
-    // Replace with actual selectors and actions to verify the first acceptance criterion
-    await expect(page.locator('SELECTOR_FOR_CRITERION_1')).toBeVisible();
+    expect(response.status()).toBe(422);
+    expect(responseBody).toEqual({
+      status: 422,
+      errorCode: '101',
+      message: 'Invalid card number',
+      errorType: 'validation',
+      pspReference: expect.any(String)  // Use expect.any(String) to allow any string reference
+    });
   });
 
-  test('Acceptance Criterion 2', async ({ page }) => {
-    await page.goto('URL_OF_YOUR_APPLICATION');
+  test('should return business validation error for invalid data', async ({ request }) => {
+    const response = await request.post('/your-endpoint', {
+      data: {
+        cardInfo: {
+          encryptedCardNumber: 'invalid-card-number'
+        }
+      }
+    });
+    
+    const responseBody = await response.json();
 
-    // Replace with actual selectors and actions to verify the second acceptance criterion
-    await expect(page.locator('SELECTOR_FOR_CRITERION_2')).toHaveText('EXPECTED_TEXT');
+    expect(response.status()).toBe(422);
+    expect(responseBody).toEqual({
+      title: 'Business validation error',
+      status: 422,
+      type: '/problems/business-validation-failure',
+      detail: 'Invalid Data',
+      instance: expect.stringContaining('/traceId/'), // Use stringContaining to match the pattern
+      violations: [
+        {
+          field: 'cardInfo.encryptedCardNumber',
+          message: 'Invalid card number'
+        }
+      ]
+    });
   });
-
-  test('Acceptance Criterion 3', async ({ page }) => {
-    await page.goto('URL_OF_YOUR_APPLICATION');
-
-    // Replace with actual selectors and actions to verify the third acceptance criterion
-    await page.locator('SELECTOR_FOR_CRITERION_3').click();
-    await expect(page.locator('SELECTOR_FOR_CRITERION_3_RESULT')).toBeVisible();
-  });
-
-  // Add additional test cases for other acceptance criteria as necessary
 
 });
 ```
