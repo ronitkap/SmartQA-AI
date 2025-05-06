@@ -1,35 +1,18 @@
 ```javascript
 import { test, expect } from '@playwright/test';
 
-test.describe('Error Handling', () => {
+test.describe('Payment Gateway - Technical Details', () => {
   
-  test('should return context-appropriate error message for invalid endpoint', async ({ request }) => {
-    const response = await request.get('/invalid-endpoint');
-    expect(response.status()).toBe(404);
-    const errorMessage = await response.json();
-    expect(errorMessage).toEqual({ message: 'Endpoint not found' });
+  test('should display the title "Technical Details"', async ({ page }) => {
+    await page.goto('/path-to-technical-details');  // Update with the actual URL
+    const title = await page.locator('h1').innerText();  // Update with the actual selector for the title
+    expect(title).toBe('Technical Details');
   });
 
-  test('should return context-appropriate error message for server error', async ({ request }) => {
-    const response = await request.get('/server-error-endpoint');
-    expect(response.status()).toBe(500);
-    const errorMessage = await response.json();
-    expect(errorMessage).toEqual({ message: 'Internal server error. Please try again later.' });
-  });
-
-  test('should return context-appropriate error message for unauthorized access', async ({ request }) => {
-    const response = await request.get('/protected-endpoint');
-    expect(response.status()).toBe(401);
-    const errorMessage = await response.json();
-    expect(errorMessage).toEqual({ message: 'Unauthorized access. Please log in.' });
-  });
-
-  test('should return usable error format across all endpoints', async ({ request }) => {
-    const response = await request.get('/another-invalid-endpoint');
-    expect(response.status()).not.toBe(200);
-    const errorMessage = await response.json();
-    expect(errorMessage).toHaveProperty('message');
-    expect(typeof errorMessage.message).toBe('string');
+  test('should display the paragraph "System: Payment Gateway"', async ({ page }) => {
+    await page.goto('/path-to-technical-details');  // Update with the actual URL
+    const paragraph = await page.locator('p').innerText();  // Update with the actual selector for the paragraph
+    expect(paragraph).toBe('System: Payment Gateway');
   });
   
 });
