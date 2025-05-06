@@ -1,37 +1,35 @@
 ```javascript
 import { test, expect } from '@playwright/test';
 
-test.describe('Unreferenced Refund Error Handling', () => {
+// Acceptance Criteria: Event Flow Diagram should be visible on the page.
+test('Event Flow Diagram should be visible', async ({ page }) => {
+  await page.goto('/path-to-your-page');
+  const diagram = await page.locator('selector-for-event-flow-diagram');
+  await expect(diagram).toBeVisible();
+});
 
-  test('should display specific error message when unreferenced refund role is not enabled', async ({ page }) => {
-    // Simulate the condition where unreferenced refund role is not enabled
-    await page.goto('/path-to-unreferenced-refund-endpoint');
-    await page.click('button#process-refund'); // Adjust selector as necessary
+// Acceptance Criteria: Event Flow Diagram should load within a specific time frame.
+test('Event Flow Diagram should load within 3 seconds', async ({ page }) => {
+  const startTime = Date.now();
+  await page.goto('/path-to-your-page');
+  await page.waitForSelector('selector-for-event-flow-diagram');
+  const endTime = Date.now();
+  expect(endTime - startTime).toBeLessThan(3000);
+});
 
-    const errorMessage = await page.locator('div#error-message').textContent();
-    expect(errorMessage).toBe('Unreferenced refund not allowed. Please reissue.');
-  });
+// Acceptance Criteria: Clicking on the Event Flow Diagram should display additional information.
+test('Clicking Event Flow Diagram should display additional information', async ({ page }) => {
+  await page.goto('/path-to-your-page');
+  const diagram = await page.locator('selector-for-event-flow-diagram');
+  await diagram.click();
+  const additionalInfo = await page.locator('selector-for-additional-info');
+  await expect(additionalInfo).toBeVisible();
+});
 
-  test('should display specific error message when merchant account is not configured for unreferenced refunds', async ({ page }) => {
-    // Simulate the condition where merchant account is not configured
-    await page.goto('/path-to-unreferenced-refund-endpoint');
-    await page.fill('input#payment-account-id', 'saved-account-id'); // Use the appropriate account ID
-    await page.click('button#process-refund'); // Adjust selector as necessary
-
-    const errorMessage = await page.locator('div#error-message').textContent();
-    expect(errorMessage).toBe('Unreferenced refund not allowed. Please reissue.');
-  });
-
-  test('should return provider code "010 - Not Allowed" in the case of generic error', async ({ page }) => {
-    // Trigger the condition for a generic error
-    await page.goto('/path-to-unreferenced-refund-endpoint');
-    await page.fill('input#payment-account-id', 'invalid-account-id'); // Invalid account ID to trigger generic error
-    await page.click('button#process-refund'); // Adjust selector as necessary
-
-    const propagatedErrorMessage = await page.locator('div#api-error-message').textContent();
-    expect(propagatedErrorMessage).toContain('010 - Not Allowed');
-    expect(propagatedErrorMessage).toContain('Not Allowed');
-  });
-
+// Acceptance Criteria: Event Flow Diagram should have a title.
+test('Event Flow Diagram should have a title', async ({ page }) => {
+  await page.goto('/path-to-your-page');
+  const title = await page.locator('selector-for-diagram-title');
+  await expect(title).toHaveText('Event Flow Diagram');
 });
 ```
